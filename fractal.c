@@ -3,14 +3,9 @@
 #include <string.h>
 #include <math.h>
 
-int main(){
-	int size;
-	printf("\n\033[22;31mO programa irá gerar arquivos no formato map{n}.dat onde n é o nivel do fractal.\n\n");
-	printf("Cada arquivo contém coordenadas no formato x  y que correspondem a pontos que formam o fractal.\033[0m\n\n");
-	
-	printf("Quantos niveis quer criar: ");
-	scanf("%d", &size);
-	
+int main(int argc, char **argv){
+	int size = atoi(argv[0]);
+
 	// nome do arquivo a ser criado, ou map{n+1}.dat
 	char filename[size];
 	// nome do arquivo que serve de base ao que será criado, ou map{n}.dat
@@ -27,22 +22,24 @@ int main(){
 		     *nmapa   = fopen(filename, "w");
 		//Os pontos necessários para criar o padrão sobre uma reta
 		float xa, ya, xb, yb, xc, yc, xd, yd, xe, ye;
-		
+
 		fscanf(mapa, "%f\t%f", &xa, &ya);
 		fscanf(mapa, "%f\t%f", &xe, &ye);
 		fprintf(nmapa, "%f\t%f\n", xa, ya);
 		int c = 0;
 
-		while(c < 3 * (pow(4, k-1))){
+		while(c < (3 * (pow(4, k-1)))){
 
-			float px = (xe - xa)/3; 
+			float px = (xe - xa)/3;
 			float py = (ye - ya)/3;
+
 			xb = xa + px;
 			yb = ya + py;
 			xd = 2 * px + xa;
 			yd = 2 * py + ya;
 			xc = (0.5*px) + (-0.866*py) + xb;
 			yc = (0.866*px) + (0.5 * py) + yb;
+
 			fprintf(nmapa, "%f\t%f\n", xb, yb);
 			fprintf(nmapa, "%f\t%f\n", xc, yc);
 			fprintf(nmapa, "%f\t%f\n", xd, yd);
@@ -58,7 +55,6 @@ int main(){
 		k++;
 		fclose(mapa);
 		fclose(nmapa);
-		
 	}
 	system ("gnuplot fractal.gpl");
 	return 0;
